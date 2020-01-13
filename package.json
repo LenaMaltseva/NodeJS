@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/LenaMaltseva/NodeJS#readme",
   "dependencies": {
-    "ansi": "*"
+    "ansi": "*",
+    "chalk": "^3.0.0",
+    "minimist": "^1.2.0"
   }
 }
