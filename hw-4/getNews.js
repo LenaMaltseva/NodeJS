@@ -8,6 +8,7 @@ const app = express()
 
 // middleware
 app.use(express.urlencoded({extended: true}));
+app.use('/styles', express.static(path.resolve(__dirname, 'assets/css')));
 
 // Настройка handlebars
 app.engine('hbs', consolidate.handlebars)
@@ -25,7 +26,6 @@ app.get('/', (req, res) => {
 
 app.post('/news', (req, res) => {
    let userChoice = Object.keys(req.body)
-
    let promises = []
    userChoice.forEach(el => {
       promises.push(getNews(el))
@@ -43,6 +43,7 @@ app.listen(8000, () => {
    console.log('Server has been started')
 })
 
+// Функционал
 function getNews (cat) {
    let url = `https://yandex.ru/news/rubric/${cat}?from=rubric`
    return new Promise( (resolve, reject) => {
