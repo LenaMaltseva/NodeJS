@@ -7,5 +7,15 @@
          <li>{{this}}</li>
       {{/each}}
    </ul>
-   
+</div>
+
+<div class="news">
+   {{#each cat}}
+      <h2>{{this.cat}}</h2>
+   <ul>
+      {{#each this.news}}
+         <li>{{this}}</li>
+      {{/each}}
+   </ul>
+   {{/each}}
 </div>

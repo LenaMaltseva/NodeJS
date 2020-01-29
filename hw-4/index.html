@@ -6,39 +6,34 @@
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    <title>News</title>
    <style>
-      body {
+      * {
          font-family: Arial, Helvetica, sans-serif;
+         box-sizing: border-box;
       }
       .container {
          width: 90%;
          max-width: 950px;
          margin: 0 auto;
       }
-    	form {
-    		background-color: #f9f9f9;
+      .form__user-choice {
+         background-color: #f9f9f9;
     		padding: 20px;
     		margin: 20px 0;
-    	}
-      .form__user-choice {
-         display: flex;
-         flex-wrap: wrap;
-         justify-content: space-between;
       }
       .form__title {
-         display: block;
-         width: 100%;
-         margin-bottom: 15px;
+         margin-bottom: 20px;
          font-weight: bold;
-         font-size: 16px;
+         font-size: 18px;
       }
       .form__category {
+         display: inline-block;
          width: 140px;
+         margin-right: 15px;
+         margin-bottom: 8px;
          font-size: 16px;
       }
       .form__button {
-         flex-wrap: initial;
-         width: 100px;
-         display: block;
+         width: 120px;
          padding: 7px;
          margin-top: 15px;
          font-weight: bold;
@@ -56,46 +51,42 @@
       <form action="/news" method="POST" class="form__user-choice">
          <legend class="form__title">Какие новости Вам интересны?</legend>
          <div class="form__category">
-            <input type="checkbox" name="politics" id="">
+            <input type="checkbox" name="politics" id="politics">
             <label for="politics">Политика</label>
          </div>
          <div class="form__category">
-            <input type="checkbox" name="society" id="">
+            <input type="checkbox" name="society" id="society">
             <label for="society">Общество</label>
          </div>
          <div class="form__category">
-            <input type="checkbox" name="business" id="">
+            <input type="checkbox" name="business" id="business">
             <label for="business">Экономика</label>
          </div>
          <div class="form__category">
-            <input type="checkbox" name="world" id="">
+            <input type="checkbox" name="world" id="world">
             <label for="world">В мире</label>
          </div>
          <div class="form__category">
-            <input type="checkbox" name="sport" id="">
-            <label for="sport">Спорт</label>
-         </div>
-         <div class="form__category">
-            <input type="checkbox" name="incident" id="">
+            <input type="checkbox" name="incident" id="incident">
             <label for="incident">Происшествия</label>
          </div>
          <div class="form__category">
-            <input type="checkbox" name="culture" id="">
+            <input type="checkbox" name="culture" id="culture">
             <label for="culture">Культура</label>
          </div>
          <div class="form__category">
-            <input type="checkbox" name="computers" id="">
+            <input type="checkbox" name="computers" id="computers">
             <label for="computers">Технологии</label>
          </div>
          <div class="form__category">
-            <input type="checkbox" name="science" id="">
+            <input type="checkbox" name="science" id="science">
             <label for="science">Наука</label>
          </div>
          <div class="form__category">
-            <input type="checkbox" name="auto" id="">
+            <input type="checkbox" name="auto" id="auto">
             <label for="auto">Авто</label>
          </div>
-         <button type="submit" class="form__button">Показать</button>
+         <br><button type="submit" class="form__button">Показать</button>
       </form>
    </div>
 </body>
