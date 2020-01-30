@@ -21,7 +21,7 @@ app.all('/', (req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-   res.sendFile(path.resolve(__dirname, 'index.html'))
+   res.render('news', template)
 })
 
 app.post('/news', (req, res) => {
@@ -31,8 +31,8 @@ app.post('/news', (req, res) => {
       promises.push(getNews(el))
    })
    Promise.all(promises).then((data) => {
-      res.send(data)
-      // res.render('news', data)
+      // res.send(data)
+      res.render('news', Object.assign(template, {allNews: data}))
    },
    (err) => {
       res.send(err)
@@ -44,6 +44,35 @@ app.listen(8000, () => {
 })
 
 // Функционал
+class Category {
+   constructor () {
+      this.values = {
+         politics: 'Политика', 
+         society: 'Общество', 
+         business: 'Экономика', 
+         world: 'В мире', 
+         incident: 'Происшествия', 
+         culture: 'Культура', 
+         computers: 'Технологии', 
+         science: 'Наука', 
+         auto: 'Авто'
+      }
+      this.list = []
+      this.getList()
+   }
+   _InRus (cat){
+      return this.values[cat]
+   }
+   getList(){
+      Object.keys(this.values).forEach(val => {
+         this.list.push({categoryClass: val, categoryName: this.values[val]});
+      });
+   }
+}
+
+let categories = new Category()
+let template = {category: categories.list}
+
 function getNews (cat) {
    let url = `https://yandex.ru/news/rubric/${cat}?from=rubric`
    return new Promise( (resolve, reject) => {
@@ -51,17 +80,13 @@ function getNews (cat) {
          if (!err && response.statusCode === 200) {
                const $ = cheerio.load(body)
                const news = $('.link.link_theme_black.i-bem')
-               const newsList = {category: cat, news: []};
+               const newsByCat = {block: []}
                for (i = 0; i < news.length; i++) {
                   let newsItem = news.eq(i).text()
-                  newsList.news.push(newsItem)
+                  newsByCat.block.push({title: newsItem, categoryClass: cat, categoryName: categories._InRus(cat)})
                }
-               resolve(newsList);
+               resolve(newsByCat)
          } else reject(err);
       })
    })
 }
-
-
-
-

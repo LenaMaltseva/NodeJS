@@ -1,21 +1,39 @@
-<div class="news">
-   {{#each cat}}
-      <h2>{{this}}</h2>
-   {{/each}}
-   <ul>
-      {{#each news}}
-         <li>{{this}}</li>
-      {{/each}}
-   </ul>
-</div>
-
-<div class="news">
-   {{#each cat}}
-      <h2>{{this.cat}}</h2>
-   <ul>
-      {{#each this.news}}
-         <li>{{this}}</li>
-      {{/each}}
-   </ul>
-   {{/each}}
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Today News</title>
+   <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+   <div class="container">
+      <form action="/news" method="POST" class="form__user-choice">
+         <legend class="form__title">Какие новости Вам интересны?</legend>
+         {{!-- handlebars for Categories --}}
+         {{#each category}}
+            <div class="form__category">
+               <input type="checkbox" name="{{this.categoryClass}}" id="{{this.categoryClass}}">
+               <label for="{{this.categoryClass}}">{{this.categoryName}}</label>
+            </div>
+         {{/each}}
+         <div class="form__manage">
+            <button type="submit" class="form__button">Показать</button>
+            <button type="reset" class="form__reset">Сбросить</button>
+         </div>
+      </form>
+      {{!-- handlebars for News--}}
+      <div class="news__block">
+         {{#each allNews}}
+            {{#each this.block}}
+            <div class="news__card">
+               <h3 class="news__title">{{this.title}}</h3>
+               <span class="news__category {{this.categoryClass}}">{{this.categoryName}}</span>
+            </div>
+            {{/each}}
+         {{/each}}
+      </div>
+   </div>
+</body>
+</html>
