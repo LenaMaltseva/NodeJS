@@ -10,30 +10,49 @@
 <body>
    <div class="container">
       <form action="/news" method="POST" class="form__user-choice">
-         <legend class="form__title">Какие новости Вам интересны?</legend>
-         {{!-- handlebars for Categories --}}
-         {{#each category}}
-            <div class="form__category">
-               <input type="checkbox" name="{{this.categoryClass}}" id="{{this.categoryClass}}">
-               <label for="{{this.categoryClass}}">{{this.categoryName}}</label>
+         <div class="form__options">
+
+            {{!-- handlebars for Categories --}}
+            <div class="form__categories">
+               <legend class="form__title">Какие новости Вам интересны?</legend>
+               {{#each category}}
+               <div class="form__category">
+                  <input type="checkbox" name="{{this.categoryClass}}" id="{{this.categoryClass}}">
+                  <label for="{{this.categoryClass}}">{{this.categoryName}}</label>
+               </div>
+               {{/each}}
             </div>
-         {{/each}}
-         <div class="form__manage">
-            <button type="submit" class="form__button">Показать</button>
+            
+            <div class="form__quantity">
+               <p class="form__title">Отображение</p>
+               <p class="form__text">Количество новостей в категории:</p>
+               <select size="1" name="quantity">
+                  <option value="6">6</option>
+                  <option value="12">12</option>
+                  <option value="24">24</option>
+                  <option value="100">все</option>
+               </select>
+            </div>
+         </div>
+         <div class="form__buttons">
+            <button type="submit" class="form__submit">Показать</button>
             <button type="reset" class="form__reset">Сбросить</button>
          </div>
       </form>
+
       {{!-- handlebars for News--}}
       <div class="news__block">
          {{#each allNews}}
             {{#each this.block}}
-            <div class="news__card">
+            <a class="news__card" target="blank" href="https://yandex.ru{{this.href}}">
                <h3 class="news__title">{{this.title}}</h3>
                <span class="news__category {{this.categoryClass}}">{{this.categoryName}}</span>
-            </div>
+               <img src="/img/link.svg" alt="Открыть в новом окне" class="news__icon">
+            </a>
             {{/each}}
          {{/each}}
       </div>
+
    </div>
 </body>
 </html>

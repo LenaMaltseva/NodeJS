@@ -9,6 +9,7 @@ const app = express()
 // middleware
 app.use(express.urlencoded({extended: true}));
 app.use('/styles', express.static(path.resolve(__dirname, 'assets/css')));
+app.use('/img', express.static(path.resolve(__dirname, 'assets/img')));
 
 // Настройка handlebars
 app.engine('hbs', consolidate.handlebars)
@@ -25,13 +26,12 @@ app.get('/', (req, res) => {
 })
 
 app.post('/news', (req, res) => {
-   let userChoice = Object.keys(req.body)
+   let userChoice = category.getUserChoice(req.body)
    let promises = []
    userChoice.forEach(el => {
       promises.push(getNews(el))
    })
    Promise.all(promises).then((data) => {
-      // res.send(data)
       res.render('news', Object.assign(template, {allNews: data}))
    },
    (err) => {
@@ -44,7 +44,7 @@ app.listen(8000, () => {
 })
 
 // Функционал
-class Category {
+class Categories {
    constructor () {
       this.values = {
          politics: 'Политика', 
@@ -58,32 +58,45 @@ class Category {
          auto: 'Авто'
       }
       this.list = []
-      this.getList()
+      this._getCatList()
    }
-   _InRus (cat){
-      return this.values[cat]
-   }
-   getList(){
+   _getCatList (){
       Object.keys(this.values).forEach(val => {
          this.list.push({categoryClass: val, categoryName: this.values[val]});
       });
    }
+   getUserChoice (obj) {
+      let userChoice = []
+      Object.keys(obj).forEach(el => {
+         if (el !== 'quantity') {
+            userChoice.push({cat: el, quantity: obj.quantity})
+         }
+      })
+      return userChoice
+   }
+   inRus (cat) {
+      return this.values[cat]
+   }
 }
 
-let categories = new Category()
-let template = {category: categories.list}
+let category = new Categories()
+let template = {category: category.list}
 
-function getNews (cat) {
-   let url = `https://yandex.ru/news/rubric/${cat}?from=rubric`
+function getNews (userChoice) {
+   let url = `https://yandex.ru/news/rubric/${userChoice.cat}?from=rubric`
    return new Promise( (resolve, reject) => {
       request(url, (err, response, body) => {
          if (!err && response.statusCode === 200) {
                const $ = cheerio.load(body)
-               const news = $('.link.link_theme_black.i-bem')
+               const news = $('.link_theme_black')
                const newsByCat = {block: []}
-               for (i = 0; i < news.length; i++) {
-                  let newsItem = news.eq(i).text()
-                  newsByCat.block.push({title: newsItem, categoryClass: cat, categoryName: categories._InRus(cat)})
+               for (let i = 0; i < (news.length < userChoice.quantity ? news.length : userChoice.quantity); i++) {
+                  newsByCat.block.push({
+                     title: news.eq(i).text(), 
+                     href: news.eq(i).attr('href'), 
+                     categoryClass: userChoice.cat, 
+                     categoryName: category.inRus(userChoice.cat)
+                  })
                }
                resolve(newsByCat)
          } else reject(err);
