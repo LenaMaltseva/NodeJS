@@ -23,20 +23,13 @@ app.get('/', (req, res) => {
    if (!req.cookies.params) {
       res.render('news', template)
    } else {
-      newsToHbs(res, req.cookies.params)
+      newsToHbs(res, getUserChoice(req.cookies.params))
    }
 })
 
 app.post('/', (req, res) => {
-   let formParams = req.body
-   if (!req.cookies.params) {
-      res.cookie('params', formParams)
-   } else if (!req.body) {
-      formParams = req.cookies.params
-   } else {
-      res.cookie('params', req.body)
-   }
-   newsToHbs(res, formParams)
+   res.cookie('params', req.body)
+   newsToHbs(res, getUserChoice(req.body))
 })
 
 app.listen(8000, () => {
@@ -65,15 +58,6 @@ class Categories {
          this.list.push({categoryClass: val, categoryName: this.values[val]});
       });
    }
-   getUserChoice (obj) {
-      let userChoice = []
-      Object.keys(obj).forEach(el => {
-         if (el !== 'quantity') {
-            userChoice.push({cat: el, quantity: obj.quantity})
-         }
-      })
-      return userChoice
-   }
    inRus (cat) {
       return this.values[cat]
    }
@@ -82,20 +66,18 @@ class Categories {
 let category = new Categories()
 let template = {category: category.list, quantity: [3, 6, 12, 24, 48]}
 
-function newsToHbs (res, formParams) {
-   let userChoice = category.getUserChoice(formParams)
-   let promises = []
-   userChoice.forEach(el => {
-      promises.push(getNews(el))
+// получение/преобразование выбора пользователя 
+function getUserChoice (obj) {
+   let userChoice = []
+   Object.keys(obj).forEach(el => {
+      if (el !== 'quantity') {
+         userChoice.push({cat: el, quantity: obj.quantity})
+      }
    })
-   Promise.all(promises).then((data) => {
-      res.render('news', Object.assign({}, template, {allNews: data}))
-   },
-   (err) => {
-      res.send(err)
-   })
+   return userChoice
 }
 
+// загрузка новостей от Яндекс.Новости, по категориям и количеству, выбранным пользователем
 function getNews (userChoice) {
    let url = `https://yandex.ru/news/rubric/${userChoice.cat}?from=rubric`
    return new Promise( (resolve, reject) => {
@@ -115,5 +97,19 @@ function getNews (userChoice) {
                resolve(newsByCat)
          } else reject(err)
       })
+   })
+}
+
+// отображение новостей, после завершения их загрузки
+function newsToHbs (res, userChoice) {
+   let promises = []
+   userChoice.forEach(el => {
+      promises.push(getNews(el))
+   })
+   Promise.all(promises).then((data) => {
+      res.render('news', Object.assign({}, template, {allNews: data}))
+   },
+   (err) => {
+      res.send(err)
    })
 }
