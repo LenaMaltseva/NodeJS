@@ -121,11 +121,10 @@ a, .news__title {
 }
 .news__card:hover > .news__title {
    color: #303F9F;
-   text-decoration: underline;
 }
 .news__icon {
    visibility: hidden;
-   height: 18px;
+   height: 20px;
 }
 .news__card:hover > .news__icon {
    visibility: visible;

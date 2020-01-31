@@ -3,47 +3,47 @@ const path = require ('path')
 const consolidate  = require ('consolidate')
 const request = require('request')
 const cheerio = require('cheerio')
+const cookieParser = require('cookie-parser')
 
 const app = express()
 
-// middleware
-app.use(express.urlencoded({extended: true}));
-app.use('/styles', express.static(path.resolve(__dirname, 'assets/css')));
-app.use('/img', express.static(path.resolve(__dirname, 'assets/img')));
+// Middleware
+app.use(express.urlencoded({extended: true}))
+app.use(cookieParser())
+app.use('/styles', express.static(path.resolve(__dirname, 'assets/css')))
+app.use('/img', express.static(path.resolve(__dirname, 'assets/img')))
 
-// Настройка handlebars
+// Handlebars
 app.engine('hbs', consolidate.handlebars)
 app.set('view engine', 'hbs')
 app.set('views', path.resolve(__dirname, 'views'))
 
-// Роутинг
-app.all('/', (req, res, next) => {
-   next();
-});
-
+// Routing
 app.get('/', (req, res) => {
-   res.render('news', template)
+   if (!req.cookies.params) {
+      res.render('news', template)
+   } else {
+      newsToHbs(res, req.cookies.params)
+   }
 })
 
-app.post('/news', (req, res) => {
-   let userChoice = category.getUserChoice(req.body)
-   let promises = []
-   userChoice.forEach(el => {
-      promises.push(getNews(el))
-   })
-   Promise.all(promises).then((data) => {
-      res.render('news', Object.assign(template, {allNews: data}))
-   },
-   (err) => {
-      res.send(err)
-   })
+app.post('/', (req, res) => {
+   let formParams = req.body
+   if (!req.cookies.params) {
+      res.cookie('params', formParams)
+   } else if (!req.body) {
+      formParams = req.cookies.params
+   } else {
+      res.cookie('params', req.body)
+   }
+   newsToHbs(res, formParams)
 })
 
 app.listen(8000, () => {
-   console.log('Server has been started')
+   console.log('Server listens http://localhost:8000')
 })
 
-// Функционал
+// Functional
 class Categories {
    constructor () {
       this.values = {
@@ -80,7 +80,21 @@ class Categories {
 }
 
 let category = new Categories()
-let template = {category: category.list}
+let template = {category: category.list, quantity: [3, 6, 12, 24, 48]}
+
+function newsToHbs (res, formParams) {
+   let userChoice = category.getUserChoice(formParams)
+   let promises = []
+   userChoice.forEach(el => {
+      promises.push(getNews(el))
+   })
+   Promise.all(promises).then((data) => {
+      res.render('news', Object.assign({}, template, {allNews: data}))
+   },
+   (err) => {
+      res.send(err)
+   })
+}
 
 function getNews (userChoice) {
    let url = `https://yandex.ru/news/rubric/${userChoice.cat}?from=rubric`
@@ -99,7 +113,7 @@ function getNews (userChoice) {
                   })
                }
                resolve(newsByCat)
-         } else reject(err);
+         } else reject(err)
       })
    })
 }
