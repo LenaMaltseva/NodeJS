@@ -67,11 +67,11 @@ let category = new Categories()
 let template = {category: category.list, quantity: [3, 6, 12, 24, 48]}
 
 // получение/преобразование выбора пользователя 
-function getUserChoice (obj) {
+function getUserChoice (formParams) {
    let userChoice = []
-   Object.keys(obj).forEach(el => {
+   Object.keys(formParams).forEach(el => {
       if (el !== 'quantity') {
-         userChoice.push({cat: el, quantity: obj.quantity})
+         userChoice.push({cat: el, quantity: formParams.quantity})
       }
    })
    return userChoice
