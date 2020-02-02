@@ -1,0 +1,12 @@
+{
+  "userWins": 2,
+  "userLoses": 4,
+  "winLog": [
+    false,
+    false,
+    false,
+    true,
+    true,
+    false
+  ]
+}
