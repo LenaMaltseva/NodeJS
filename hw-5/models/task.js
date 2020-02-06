@@ -8,11 +8,13 @@ const taskSchema = new Schema ({
    contractor: { 
       type: Schema.Types.ObjectId, 
       ref: 'User'
-  },
+   },
   priority: {
      type: String, 
-     enum: ['Low', 'Normal', 'High', 'First'], 
-     required: [true, 'How important is this task?']} 
+     enum: ['low', 'normal', 'high', 'first'],
+     required: true,
+     lowercase: true
+   } 
 })
 
 module.exports = mongoose.model('Task', taskSchema, 'tasks')

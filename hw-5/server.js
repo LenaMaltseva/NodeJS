@@ -13,7 +13,7 @@ app.listen(port, () => {
 })
 
 // Database
-const db = mongoose.connect('mongodb://localhost:32768/insta', {
+const db = mongoose.connect('mongodb://localhost:32769/insta', {
    useNewUrlParser: true, 
    useUnifiedTopology: true,
    useFindAndModify: false

@@ -5,9 +5,9 @@ module.exports = function (app, db) {
    app.post('/tasks', async (req, res) => {
       const task = new Task(req.body)
       const savedTask = await task.save(err => {
-         if (!err) {
-            console.log('New task successfully added')
-         }
+         if (err) {
+            res.send(err)
+         } else console.log('New task successfully added')
       })
       res.json(savedTask)
    })
