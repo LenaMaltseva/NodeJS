@@ -9,6 +9,10 @@ const userSchema = new Schema({
    avatar: String,
    email: String,
    bio: String, 
+   tasks: { 
+      type: Schema.Types.ObjectId, 
+      ref: 'Task'
+  },
 })
 
 module.exports = mongoose.model('User', userSchema, 'users')
