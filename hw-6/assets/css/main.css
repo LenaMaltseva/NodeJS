@@ -4,5 +4,9 @@
    box-sizing: border-box;
 }
 body {
-   font-family: Arial, Helvetica, sans-serif;
+   font-family: 'Fjalla One', sans-serif;
+   font-family: 'Roboto', sans-serif;
+}
+input, textarea {
+   display: block;
 }

@@ -7,15 +7,19 @@ const userSchema = new Schema({
    username: { type: String, required: true },
    firstName: String,
    lastName: String,
+   mail: { type: String, required: true },
    password: { type: String, required: true }, //bcrypt
 })
 
-userSchema.pre('save', (req, res, next) => {
-   const hashPassword = bcrypt.hashSync(req.body.password, salt)
-   this.password = hashPassword
+userSchema.pre('save', function (next) {
+   if (this.isModified('password')) {
+      this.password = bcrypt.hashSync(this.password, salt)
+   }
    next()
 })
 
-// bcrypt.compareSync('input password', 'saved password')  // true/false
+userSchema.methods.comparePassword = function (inputPass) {
+   return bcrypt.compareSync(inputPass, this.password) 
+}
 
 module.exports = mongoose.model('User', userSchema, 'users')

@@ -4,10 +4,34 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Agenda | Manage your tasks, reach your goals</title>
+   {{!-- <link href="https://fonts.googleapis.com/css?family=Fjalla+One|Roboto:300,400,700&display=swap&subset=cyrillic" rel="stylesheet"> --}}
    <link rel="stylesheet" href="/styles/main.css">
 </head>
 <body>
-   
+   <a href="/logout">Log out</a>
+   <form action="/tasks" method="POST">
+      <textarea type="text" name="taskBody" id="taskBody"></textarea>
+      <select size="1" name="priority">
+         {{#each priority}}
+            <option value="{{this}}">{{this}}</option>
+         {{/each}}
+      </select>
+      <input type="date" name="deadline" id="deadline">
+      <input type="hidden" name="author" id="author" value="{{user._id}}">
+      <button type="submit">Submit</button>
+   </form>
+
+   <h1>Here will be user's tasks</h1>
+   {{#each tasks}}
+      <h2>{{this.taskBody}}</h2>
+   {{/each}}
+
+<script>
+   const date = new Date()
+   const formatDate = date.getFullYear() + '-' + (date.getMonth() < 9 ? '0' : '') + (date.getMonth() + 1) + '-' + (date.getDate() < 10 ? '0' : '') + date.getDate()
+   document.getElementById("deadline").value = formatDate;
+   document.getElementById('deadline').setAttribute('min', formatDate);
+</script>
 
 </body>
 </html>
