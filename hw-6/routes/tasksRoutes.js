@@ -18,6 +18,29 @@ module.exports = function (app, db, passport) {
       res.redirect('/tasks')
    })
 
+   app.post('/tasks/complete', async (req, res) => {
+      await Task.findOneAndUpdate({_id: req.body.complete}, {completed: true}, (err) => {
+         if (err) {
+            throw err
+         }
+         res.redirect('/tasks')
+      })
+   })
+   
+   app.post('/tasks/delete', async (req, res) => {
+      await Task.findOneAndDelete({_id: req.body.delete}, (err, task) => {
+         if (err) {
+            throw err
+         }
+         res.redirect('/tasks')
+      })
+   })
+
+   // Development
+   app.get('/tasks-db', async (req, res) => {
+      const tasks = await Task.find()
+      res.json(tasks)
+   })
    app.delete('/tasks/:id', async (req, res) => {
       await Task.findByIdAndDelete(req.params.id, (err, task) => {
          if (err) {
@@ -26,11 +49,5 @@ module.exports = function (app, db, passport) {
          console.log(task, 'has been deleted')
          res.send('completed')
       })
-   })
-
-   // Development
-   app.get('/tasks-db', async (req, res) => {
-      const tasks = await Task.find()
-      res.json(tasks)
    })
 }

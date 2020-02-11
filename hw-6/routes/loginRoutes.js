@@ -5,18 +5,18 @@ module.exports = function (app, db) {
 
    // Production
    app.get('/', (req, res) => {
-      res.render('login')
+      const error = !!req.query.error
+      res.render('sign_in', {error})
+   })
+
+   app.get('/sign_up', (req, res) => {
+      res.render('sign_up')
    })
 
    app.post('/sign_up', async (req, res) => {
       const user = new User(req.body)
       await user.save()
       res.redirect('/')
-   })
-
-   app.get('/sign_in', (req, res) => {
-      const error = !!req.query.error
-      res.render('login', {error})
    })
 
    app.post('/sign_in', passport.authenticate)

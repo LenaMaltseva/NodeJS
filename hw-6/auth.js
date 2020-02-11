@@ -30,6 +30,6 @@ module.exports = {
    session: passport.session(),
    authenticate: passport.authenticate( 'local', {
       successRedirect: './tasks',
-      failureRedirect: './sign_in?error=the-user-is-not-found'
+      failureRedirect: './?error=the-user-is-not-found'
    })
 }
