@@ -3,7 +3,7 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Agenda | Sign up or sign in </title>
+   <title>Agenda | Sign in</title>
    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap&subset=cyrillic" rel="stylesheet">
    <link rel="stylesheet" href="/styles/main.css">
 </head>
@@ -21,10 +21,10 @@
          <form action="/sign_in" method="POST" class="login__sign-in">
             <input type="text" name="username" id="username" placeholder="Username" class="login__input">
             <input type="password" name="password" id="password" placeholder="Password" class="login__input">
-            <div class="login__remember">
-               <label for="remember_me" class="login__label">Remember me</label>
+            {{!-- <div class="login__remember">
                <input type="checkbox" name="remember_me" id="remember_me" value='1' class="login__checkbox">
-            </div>
+               <label for="remember_me" class="login__label">Remember me</label>
+            </div> --}}
             <button type="submit" class="login__button">Submit</button>
          </form>
          <p class="login__text">New to Agenda? <a href="/sign_up" class="login__link">Create an account.</a></p>

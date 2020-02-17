@@ -44,11 +44,11 @@
                         {{#if this.completed}}done{{/if}}
                      </div>
                      <form action="/tasks/complete" method="POST">
-                        <input type="hidden" name="complete" id="complete" value="{{this._id}}">
+                        <input type="hidden" name="complete" value="{{this._id}}">
                         <button value="submit" class="task__button" {{#if this.completed}}disabled{{/if}}>{{#if this.completed}}{{else}}<img src="/images/icon_done.svg" alt="Mark as done" class="task__button_icon">{{/if}}</button>
                      </form>
                      <form action="/tasks/delete" method="POST">
-                        <input type="hidden" name="delete" id="delete" value="{{this._id}}">
+                        <input type="hidden" name="delete" value="{{this._id}}">
                         <button value="submit" class="task__button"><img src="/images/icon_delete.svg" alt="Delete task" class="task__button_icon"></button>
                      </form>
                   </div>
