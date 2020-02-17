@@ -14,17 +14,15 @@
          <img src="/images/logo-mono.png" alt="Agenda" class="logo_mono">
          <h1>Sign in to Agenda</h1>
          <div class="login__error">
-            {{#if error}}
-               The user is not found
-            {{/if}}
+            {{message}}
          </div>
          <form action="/sign_in" method="POST" class="login__sign-in">
             <input type="text" name="username" id="username" placeholder="Username" class="login__input">
             <input type="password" name="password" id="password" placeholder="Password" class="login__input">
-            {{!-- <div class="login__remember">
+            <div class="login__remember">
                <input type="checkbox" name="remember_me" id="remember_me" value='1' class="login__checkbox">
                <label for="remember_me" class="login__label">Remember me</label>
-            </div> --}}
+            </div>
             <button type="submit" class="login__button">Submit</button>
          </form>
          <p class="login__text">New to Agenda? <a href="/sign_up" class="login__link">Create an account.</a></p>

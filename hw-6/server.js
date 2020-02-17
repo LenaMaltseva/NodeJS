@@ -7,6 +7,7 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
 const passport = require('./auth')
 const cookieParser = require('cookie-parser')
+const flash = require('connect-flash')
 
 const app = express()
 
@@ -18,23 +19,24 @@ const mustBeAuthenticate = (req, res, next) => {
    }
 }
 
-// Middleware
+// Common middleware
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-app.use(cookieParser())
 app.use('/styles', express.static(path.resolve('hw-6', 'assets/css')))
 app.use('/images', express.static(path.resolve('hw-6', 'assets/img')))
+
+// Auth middleware
+app.use(cookieParser())
 app.use(session({
-   resave: true,
+   resave: false,
    saveUninitialized: false,
    secret: 'secret phrase', // ключ
    store: new MongoStore({mongooseConnection: mongoose.connection}),
-   cookie: {
-      maxAge: 3600 * 24 * 7 * 1000 //one week
-   }
 }))
+app.use(flash())
 app.use(passport.initialize)
 app.use(passport.session)
+app.use(passport.authenticateRemember)
 app.use('/tasks', mustBeAuthenticate)
 app.use(router)
 

@@ -72,7 +72,7 @@ h1 {
 .login__input:focus::placeholder {
    color: #F7931E;
 }
-/* .login__remember {
+.login__remember {
    display: flex;
    align-items: center;
 }
@@ -83,7 +83,7 @@ h1 {
    margin-left: 10px;
    font-size: 14px;
    cursor: pointer;
-} */
+}
 .login__button {
    width: 100%;
    margin: 20px 0;
