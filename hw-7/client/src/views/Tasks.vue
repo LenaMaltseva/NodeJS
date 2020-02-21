@@ -24,6 +24,7 @@ import Header from '@/components/Header'
 import TaskForm from '@/components/TaskForm'
 import TaskItem from '@/components/TaskItem'
 import CRUD from '@/services/crud'
+import cookies from '@/services/cookies'
 
 export default {
    props: ['user'],
@@ -42,12 +43,11 @@ export default {
       async getTasks() {
          const tasks = await CRUD.fetchTasks()
          this.tasks = tasks.data
-         console.log(this.tasks)
       },
       async addTask (newTask) {
          if (newTask.taskBody) {
             await CRUD.addTask(newTask)
-            // this.$router.push({ name: 'Tasks' })
+            this.$router.go({ name: 'Tasks' })
          } else alert('Empty task!')
       },
       async completeTask (task) {
@@ -55,15 +55,15 @@ export default {
          id: task._id,
          completed: !task.completed,
          })
-         // this.$router.push({ name: 'Tasks' })
+         this.$router.go({ name: 'Tasks' })
       },
       async removeTask (id) {
          await CRUD.deleteTask(id)
-         // this.$router.push({ name: 'Tasks' })
+         this.$router.go({ name: 'Tasks' })
       },
       logout() {
-         delete document.cookie
-         // this.$router.go({ path: '/' })
+         cookies.set('token', "", {'max-age': -1 })
+         this.$router.push({ name: 'Home' })
       }
    }
 }

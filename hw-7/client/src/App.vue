@@ -1,23 +1,23 @@
 <template>
   <div id="app">
-    <!-- <router-view></router-view> -->
-    <Auth v-if="!user.token" :user="user" />
-    <Tasks v-else v-bind:user="user"/>
+    <router-view :user="user" ></router-view>
   </div>
 </template>
 
 <script>
 import Auth from '@/views/Auth'
 import Tasks from '@/views/Tasks'
+import router from '@/router'
+import cookies from '@/services/cookies'
 
 export default {
   name: 'App',
   data() {
     return {
       user: {
-        username: '',
-        _id: '',
-        token: ''
+        username: cookies.getValue('username'),
+        _id: cookies.getValue('_id'),
+        token: cookies.getValue('token')
       },
     }
   },

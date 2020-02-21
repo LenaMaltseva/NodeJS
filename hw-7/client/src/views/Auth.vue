@@ -1,6 +1,5 @@
 <template>
   <main class="login__container">
-     
       <div class="login__block">
         <img src="@/assets/logo-mono.png" alt="Agenda" class="logo_mono">
         <h1>{{ signIn ? 'Sign in to Agenda' : 'Create your account' }}</h1>
@@ -25,6 +24,7 @@
 import SignIn from '@/components/SignIn'
 import SignUp from '@/components/SignUp'
 import CRUD from '@/services/crud'
+import cookies from '@/services/cookies'
 
 export default {
    props: ['user'],
@@ -41,31 +41,28 @@ export default {
       async toLogin(user) {
          const authUser = await CRUD.signIn(user)
          if (authUser.data.message) {
-            this.errorMessage = authUser.data.message
-         } else this.errorMessage = ''
-         if (authUser.data.token) {
-            document.cookie = `token=${authUser.data.token}`
+            return this.errorMessage = authUser.data.message
          }
-         console.log(authUser)
-         this.user.token = authUser.data.token
-         this.user._id = authUser.data._id
-         this.user.username = authUser.data.username
-         // this.$router.go({ path: '/tasks' })
+         if (authUser.data.token) {
+            for (let key in authUser.data) {
+                cookies.set(key, authUser.data[key])
+            }
+            this.errorMessage = ''
+            this.$router.push({ name: 'Tasks' })
+         }
       },
       async addNewUser(newUser) {
          const savedUser = await CRUD.signUp(newUser)
          if (savedUser.data.message) {
             this.errorMessage = savedUser.data.message
-         } else this.errorMessage = ''
-         if (savedUser.data.token) {
-            document.cookie = `token=${savedUser.data.token}`
          }
-         console.log(savedUser)
-         this.user.token = savedUser.data.token
-         this.user._id = savedUser.data._id
-         this.user.username = savedUser.data.username
-         // this.$router.go({ path: '/' })
-         // this.$router.push({ name: 'Auth' })
+         if (savedUser.data.token) {
+            for (let key in savedUser.data) {
+                cookies.set(key, savedUser.data[key])
+            }
+            this.errorMessage = ''
+            this.$router.push({ name: 'Home' })
+         }
       }
    }
 }
