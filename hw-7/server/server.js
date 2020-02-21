@@ -17,7 +17,7 @@ app.listen(port, () => {
 })
 
 // Database
-const db = mongoose.connect('mongodb://localhost:32773/to-do-list', {
+mongoose.connect('mongodb://localhost:32774/to-do-list', {
    useNewUrlParser: true,
    useUnifiedTopology: true,
    useFindAndModify: false

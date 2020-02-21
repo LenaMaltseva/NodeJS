@@ -14,6 +14,8 @@ router.post('/sign_up', async (req, res) => {
       const plainUser = JSON.parse(JSON.stringify(newUser))
       delete plainUser.password
       return res.json({
+         _id: plainUser._id,
+         username: plainUser.username,
          token: jwt.sign(plainUser, 'the-most-secure-secret-phrase')
       })
    } else {
@@ -34,14 +36,10 @@ router.post('/sign_in', async (req, res) => {
    const plainUser = JSON.parse(JSON.stringify(user))
    delete plainUser.password
    res.json({
+      _id: plainUser._id,
+      username: plainUser.username,
       token: jwt.sign(plainUser, 'the-most-secure-secret-phrase')
    })
-})
-
-// Logout
-router.get('/logout', (req, res) => {
-   delete req.headers['Authorization']
-   res.json({message: 'Logout completed'})
 })
 
 module.exports = router
