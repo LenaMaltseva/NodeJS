@@ -44,8 +44,12 @@ export default {
             return this.errorMessage = authUser.data.message
          }
          if (authUser.data.token) {
+            let cookieAge = ''
+            if (user.remember_me) {
+               cookieAge = 3600 * 24 * 365 * 1000    // one year
+            }
             for (let key in authUser.data) {
-                cookies.set(key, authUser.data[key])
+               cookies.set(key, authUser.data[key], {path: '/', 'max-аge': +cookieAge})
             }
             this.errorMessage = ''
             this.$router.push({ name: 'Tasks' })
@@ -58,9 +62,10 @@ export default {
          }
          if (savedUser.data.token) {
             for (let key in savedUser.data) {
-                cookies.set(key, savedUser.data[key])
+                cookies.set(key, savedUser.data[key], {path: '/'})
             }
             this.errorMessage = ''
+            this.signIn = !this.signIn
             this.$router.push({ name: 'Home' })
          }
       }

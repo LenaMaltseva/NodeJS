@@ -1,24 +1,9 @@
 export default {
-   set: function (name, value, options = {}) {
-      options = {
-         path: '/',
-         // put other options here
-      }
-    
-      if (options.expires instanceof Date) {
-         options.expires = options.expires.toUTCString()
-      }
-    
+   set: function (name, value, options) {
       let updatedCookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`
-    
       for (let optionKey in options) {
-         updatedCookie += `; ${optionKey}`
-         let optionValue = options[optionKey]
-         if (!optionValue) {
-            updatedCookie += `=${optionValue}`
-         }
+         updatedCookie += `; ${optionKey}=${options[optionKey]}`
       }
-   
       document.cookie = updatedCookie
     },
 
