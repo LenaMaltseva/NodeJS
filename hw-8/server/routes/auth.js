@@ -42,4 +42,10 @@ router.post('/sign_in', async (req, res) => {
    })
 })
 
+// Get user
+router.get('/:id', async (req, res) => {
+   const user = await User.findById(req.params.id)
+   res.json(user)
+})
+
 module.exports = router

@@ -26,35 +26,4 @@ router.get('/', async (req, res) => {
    res.json(tasks)
 })
 
-// Get one task
-router.get('/:id', async (req, res) => {
-   const task = await Task.findById(req.params.id)
-   res.json(task)
-})
-
-// Create new task
-router.post('/', async (req, res) => {
-   const task = new Task(req.body)
-   const newTask = await task.save()
-   res.json(newTask)
-})
-
-// Update task, full
-router.put('/:id', async (req, res) => {
-   const task = await Task.findByIdAndUpdate(req.params.id, req.body)
-   res.json(task)
-})
-
-// Update task, partial
-router.patch('/:id', async (req, res) => {
-   const task = await Task.findByIdAndUpdate(req.params.id, {$set: req.body})
-   res.json(task)
-})
-
-// Delete task
-router.delete('/:id', async (req, res) => {
-   const task = await Task.findByIdAndRemove(req.params.id)
-   res.json(task)
-})
-
 module.exports = router

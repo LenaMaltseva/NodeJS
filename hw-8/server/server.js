@@ -3,8 +3,6 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const router = require('./routes')
 const http = require('http')
-// const SocketIO = require('socket.io')
-// const path = require('path')
 
 const app = express()
 
@@ -21,27 +19,11 @@ server.listen(port, () => {
 })
 
 // SocketIO
-// const Task = require('./models/task')
-// const io = SocketIO(server)
-// io.on('connection', (socket) => {
-//    console.log('someone has connected', socket.id)
-
-//    socket.on('task', async(body) => {
-//       const task = new Task(body)
-//       const savedTask = await task.save()
-      
-//       socket.broadcast.emit('task', savedTask)
-//       socket.emit('task', savedTask)
-//    })
-
-//    socket.on('disconnect', () => {
-//       console.log('someone has disconnected')
-//    })
-// })
-
+const SocketIO = require('socket.io')
+const io = require('./socket')(SocketIO(server))
 
 // Database
-const portDB = 32775       // have to change after Mongo (re-)starting
+const portDB = 32775
 mongoose.connect(`mongodb://localhost:${portDB}/task-manager`, {
    useNewUrlParser: true,
    useUnifiedTopology: true,

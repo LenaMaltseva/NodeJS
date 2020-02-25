@@ -39,27 +39,29 @@ export default {
    mounted() {
       this.getTasks()
    },
+   sockets: {
+      updTaskList () {
+         this.getTasks()
+      }
+   },
    methods: {
       async getTasks() {
          const tasks = await CRUD.fetchTasks()
          this.tasks = tasks.data
       },
-      async addTask (newTask) {
+      addTask (newTask) {
          if (newTask.taskBody) {
-            await CRUD.addTask(newTask)
-            this.$router.go({ name: 'Tasks' })
+            this.$socket.emit('addTask', newTask)
          } else alert('Empty task!')
       },
-      async completeTask (task) {
-         await CRUD.updateTask({
-         id: task._id,
-         completed: !task.completed,
+      completeTask (task) {
+         this.$socket.emit('completeTask', {
+            id: task._id,
+            completed: !task.completed,
          })
-         this.$router.go({ name: 'Tasks' })
       },
-      async removeTask (id) {
-         await CRUD.deleteTask(id)
-         this.$router.go({ name: 'Tasks' })
+      removeTask (taskId) {
+         this.$socket.emit('removeTask', taskId)
       },
       logout() {
          cookies.set('token', "", {'max-age': -1 })
@@ -167,7 +169,7 @@ export default {
       padding: 15px 10px 15px 20px;
       border-radius: 20px;
       box-shadow: 0 0 5px 1px #ddd;
-      font-size: 14px;
+      font-size: 12px;
    }
    .task__item_done {
       background-color: #eee;
@@ -175,17 +177,16 @@ export default {
    }
    .task__title {
       flex-basis: 55%;
-      font-size: 16px;
+      font-size: 14px;
    }
    .task__priority {
-      width: 100px;
-      font-size: 14px;
-      text-align: center;
+      width: 60px;
    }
    .task__date {
-      width: 200px;
-      font-size: 14px;
-      text-align: center;
+      width: 100px;
+   }
+   .task__author {
+      width: 60px;
    }
    .task__actions {
       width: 150px;
@@ -197,7 +198,6 @@ export default {
    .task__complete {
       width: 50px;
       color: #aaa;
-      font-size: 14px;
    }
    .task__button {
       height: 40px;

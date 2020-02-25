@@ -9,19 +9,13 @@ export default {
    signIn (params) {
       return API().post('auth/sign_in', params)
    },
+   findUser(id) {
+      return API().get('auth/' + id)
+   },
    
 //Tasks
    fetchTasks () {
       return API().get('tasks')
-   },
-   addTask (params) {
-      return API().post('tasks', params)
-   },
-   updateTask (params) {
-      return API().patch('tasks/' + params.id, params)
-   },
-   deleteTask (id) {
-      return API().delete('tasks/' + id)
    }
 }
 
